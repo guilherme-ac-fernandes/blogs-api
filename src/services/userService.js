@@ -12,7 +12,7 @@ module.exports = {
     if (user.dataValues.password !== password) return { code: 400, message: 'Invalid fields' };
 
     const token = createToken(email);
-    return { token };
+    return { code: 200, data: token };
   },
   create: async ({ displayName, email, password, image }) => {
     const validation = validateCreate({ displayName, email, password });
@@ -23,7 +23,7 @@ module.exports = {
 
     await User.create({ displayName, email, password, image });
     const token = createToken(email);
-    return { token };
+    return { code: 201, data: token };
   },
   getAll: async () => {
     const users = await User.findAll({
