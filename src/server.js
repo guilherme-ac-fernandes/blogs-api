@@ -9,4 +9,4 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.listen(port, () => console.log('ouvindo porta', port));
+app.listen(port, () => console.log('Ouvindo na porta', port, '...'));
