@@ -2,9 +2,9 @@ const rescue = require('express-rescue');
 const { userService } = require('../services');
 
 module.exports = {
-  create: rescue(async (req, res, next) => {
+  login: rescue(async (req, res, next) => {
     const { email, password } = req.body;
-    const { token, code, message } = await userService.create({
+    const { token, code, message } = await userService.login({
       email, password,
     });
     if (code) return next({ code, message });

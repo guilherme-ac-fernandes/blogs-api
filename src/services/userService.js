@@ -3,7 +3,7 @@ const createToken = require('./createToken');
 const { validateLogin } = require('./validations');
 
 module.exports = {
-  create: async ({ email, password }) => {
+  login: async ({ email, password }) => {
     const validation = validateLogin({ email, password });
     if (validation.code) return validation;
 
