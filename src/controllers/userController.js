@@ -10,4 +10,12 @@ module.exports = {
     if (code) return next({ code, message });
     return res.status(200).json({ token });
   }),
+  create: rescue(async (req, res, next) => {
+    const { displayName, email, password, image } = req.body;
+    const { token, code, message } = await userService.create({
+      displayName, email, password, image,
+    });
+    if (code) return next({ code, message });
+    return res.status(201).json({ token });
+  }),
 };

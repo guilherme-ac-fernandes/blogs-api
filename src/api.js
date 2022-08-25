@@ -8,7 +8,7 @@ const Middlewares = require('./middleware');
 app.use(express.json());
 
 app.post('/login', userController.login);
-// app.post('/user', userController.create);
+app.post('/user', userController.create);
 
 // Middleware de Erro Genérico
 app.use(Middlewares.error);
