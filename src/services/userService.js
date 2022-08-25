@@ -25,4 +25,11 @@ module.exports = {
     const token = createToken(email);
     return { token };
   },
+  getAll: async () => {
+    const users = await User.findAll({
+      attributes: { exclude: ['password'] },
+    });
+    if (!users) return { code: 404, message: 'Users not found' };
+    return { code: 200, data: users };
+  },
 };
