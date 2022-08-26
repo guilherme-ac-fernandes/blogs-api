@@ -2,6 +2,9 @@ const { BlogPost, Category, PostCategory, sequelize } = require('../database/mod
 const { validatePost } = require('./helpers/validations');
 
 module.exports = {
+  // Resolução da aplicação de inserção em duas tabelas utilizando
+  // transaction proveniente da mentoria Summer da Luá Octaviano
+  // source: https://github.com/luacomacento/friends-api/blob/friends-dev/src/services/characters.js
   create: async (userId, { title, content, categoryIds }) => {
     const validation = validatePost({ title, content, categoryIds });
     if (validation.code) return validation;
