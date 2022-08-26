@@ -4,6 +4,7 @@ const ERROR_MISSING_FIELDS = '400|Some required fields are missing';
 const ERROR_NAME_LENGTH = '400|"displayName" length must be at least 8 characters long';
 const ERROR_EMAIL = '400|"email" must be a valid email';
 const ERROR_PASSWORD = '400|"password" length must be at least 6 characters long';
+const ERROR_CATEGORY = '400|"name" is required';
 
 const loginSchema = Joi.object({
   email: Joi.string().email().required().messages({
@@ -34,6 +35,13 @@ const createSchema = Joi.object({
   }),
 });
 
+const categorySchema = Joi.object({
+  name: Joi.string().required().messages({
+    'string.empty': ERROR_CATEGORY,
+    'any.required': ERROR_CATEGORY,
+  }),
+});
+
 // Função genérica para validações
 const handleCallback = (schema, variable) => {
   const { error } = schema.validate(variable);
@@ -46,6 +54,7 @@ const handleCallback = (schema, variable) => {
 
 const validateLogin = (object) => handleCallback(loginSchema, object);
 const validateCreate = (object) => handleCallback(createSchema, object);
+const validateCategory = (object) => handleCallback(categorySchema, object);
 
 // const validateLogin = ({ email, password }) => {
 //   if (!email || email === '') {
@@ -60,4 +69,5 @@ const validateCreate = (object) => handleCallback(createSchema, object);
 module.exports = {
   validateLogin,
   validateCreate,
+  validateCategory,
 };
