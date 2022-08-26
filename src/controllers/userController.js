@@ -10,6 +10,7 @@ module.exports = {
     if (message) return next({ code, message });
     return res.status(code).json({ token: data });
   }),
+
   create: rescue(async (req, res, next) => {
     const { displayName, email, password, image } = req.body;
     const { data, code, message } = await userService.create({
@@ -18,8 +19,16 @@ module.exports = {
     if (message) return next({ code, message });
     return res.status(code).json({ token: data });
   }),
+
   getAll: rescue(async (_req, res, next) => {
     const { data, code, message } = await userService.getAll();
+    if (message) return next({ code, message });
+    return res.status(code).json(data);
+  }),
+
+  findById: rescue(async (req, res, next) => {
+    const { id } = req.params;
+    const { data, code, message } = await userService.findById(id);
     if (message) return next({ code, message });
     return res.status(code).json(data);
   }),

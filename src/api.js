@@ -11,6 +11,7 @@ app.use(express.json());
 app.post('/login', userController.login);
 app.post('/user', userController.create);
 app.get('/user', Middlewares.auth, userController.getAll);
+app.get('/user/:id', Middlewares.auth, userController.findById);
 
 // Middleware de Erro Genérico
 app.use(Middlewares.error);
