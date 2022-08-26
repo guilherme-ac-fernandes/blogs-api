@@ -16,6 +16,7 @@ app.get('/user/:id', Middlewares.auth, userController.findById);
 
 // CategoryController
 app.post('/categories', Middlewares.auth, categoryController.create);
+app.get('/categories', Middlewares.auth, categoryController.getAll);
 
 // Middleware de Erro Genérico
 app.use(Middlewares.error);

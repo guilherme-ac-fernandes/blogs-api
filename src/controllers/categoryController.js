@@ -8,4 +8,10 @@ module.exports = {
     if (message) return next({ code, message });
     return res.status(code).json({ ...data });
   }),
+
+  getAll: rescue(async (_req, res, next) => {
+    const { data, code, message } = await categoryService.getAll();
+    if (message) return next({ code, message });
+    return res.status(code).json(data);
+  }),
 };
