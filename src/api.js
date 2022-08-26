@@ -22,9 +22,10 @@ app.get('/user/:id', Middlewares.auth, userController.findById);
 app.post('/categories', Middlewares.auth, categoryController.create);
 app.get('/categories', Middlewares.auth, categoryController.getAll);
 
-// PosrController
+// PostController
 app.post('/post', Middlewares.auth, postController.create);
 app.get('/post', Middlewares.auth, postController.getAll);
+app.get('/post/:id', Middlewares.auth, postController.findById);
 
 // Middleware de Erro Genérico
 app.use(Middlewares.error);
