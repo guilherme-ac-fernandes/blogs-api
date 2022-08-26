@@ -32,4 +32,11 @@ module.exports = {
     if (message) return next({ code, message });
     return res.status(code).json(data);
   }),
+
+  delete: rescue(async (req, res) => {
+    const { userId } = req.user;
+    const { code } = await userService.delete(userId);
+    return res.status(code).end();
+  }),
+
 };

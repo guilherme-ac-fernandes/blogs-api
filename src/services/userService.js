@@ -40,4 +40,9 @@ module.exports = {
     if (!user) return { code: 404, message: 'User does not exist' };
     return { code: 200, data: user };
   },
+
+  delete: async (userId) => {
+    await User.destroy({ where: { id: userId } });
+    return { code: 204 };
+  },
 };

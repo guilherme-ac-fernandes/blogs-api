@@ -17,6 +17,7 @@ app.post('/login', userController.login);
 app.post('/user', userController.create);
 app.get('/user', Middlewares.auth, userController.getAll);
 app.get('/user/:id', Middlewares.auth, userController.findById);
+app.delete('/user/:id', Middlewares.auth, userController.delete);
 
 // CategoryController
 app.post('/categories', Middlewares.auth, categoryController.create);
@@ -25,6 +26,7 @@ app.get('/categories', Middlewares.auth, categoryController.getAll);
 // PostController
 app.post('/post', Middlewares.auth, postController.create);
 app.get('/post', Middlewares.auth, postController.getAll);
+app.get('/post/search', Middlewares.auth, postController.search);
 app.get('/post/:id', Middlewares.auth, postController.findById);
 app.put('/post/:id', Middlewares.auth, postController.update);
 app.delete('/post/:id', Middlewares.auth, postController.delete);

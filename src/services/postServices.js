@@ -88,4 +88,18 @@ module.exports = {
     await BlogPost.destroy({ where: { id } });
     return { code: 204 };
   },
+
+  search: async (search) => {
+    const posts = await BlogPost.findAll({
+      where: { title: { [sequelize.Op.like]: `%${search}%` } },
+      include: 
+      [
+        { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { model: Category, as: 'categories', through: { attributes: [] } },
+      ],
+    });
+    if (!posts) return { code: 404, message: 'AQUI' };
+    return { code: 200, data: posts };
+  },
+  
 };

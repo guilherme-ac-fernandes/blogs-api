@@ -44,4 +44,11 @@ module.exports = {
     return res.status(code).end();
   }),
 
+  search: rescue(async (req, res, next) => {
+    const { q: search } = req.query;
+    const { data, code, message } = await postServices.search(search);
+    if (message) return next({ code, message });
+    return res.status(code).json(data);
+  }),
+
 };
