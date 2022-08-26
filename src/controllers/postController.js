@@ -24,4 +24,24 @@ module.exports = {
     if (message) return next({ code, message });
     return res.status(code).json(data);
   }),
+
+  update: rescue(async (req, res, next) => {
+    const { id } = req.params;
+    const { userId } = req.user;
+    const { title, content } = req.body;
+    const { data, code, message } = await postServices.update(id, userId, {
+      title, content,
+    });
+    if (message) return next({ code, message });
+    return res.status(code).json(data);
+  }),
+
+  delete: rescue(async (req, res, next) => {
+    const { id } = req.params;
+    const { userId } = req.user;
+    const { code, message } = await postServices.delete(id, userId);
+    if (message) return next({ code, message });
+    return res.status(code).end();
+  }),
+
 };

@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { BlogPost } = require('../../database/models');
 
 const ERROR_MISSING_FIELDS = '400|Some required fields are missing';
 const ERROR_NAME_LENGTH = '400|"displayName" length must be at least 8 characters long';
@@ -57,6 +58,17 @@ const postSchema = Joi.object({
   }),
 });
 
+const postUpdateSchema = Joi.object({
+  title: Joi.string().required().messages({
+    'string.empty': ERROR_MISSING_FIELDS,
+    'any.required': ERROR_MISSING_FIELDS,
+  }),
+  content: Joi.string().required().messages({
+    'string.empty': ERROR_MISSING_FIELDS,
+    'any.required': ERROR_MISSING_FIELDS,
+  }),
+});
+
 // Função genérica para validações
 const handleCallback = (schema, variable) => {
   const { error } = schema.validate(variable);
@@ -67,14 +79,24 @@ const handleCallback = (schema, variable) => {
   return true;
 };
 
+const validateUser = async (id, userId) => {
+  const post = await BlogPost.findByPk(id);
+  if (!post) return { code: 404, message: 'Post does not exist' };
+  if (userId !== post.userId) return { code: 401, message: 'Unauthorized user' };
+  return true;
+};
+
 const validateLogin = (object) => handleCallback(loginSchema, object);
 const validateCreate = (object) => handleCallback(createSchema, object);
 const validateCategory = (object) => handleCallback(categorySchema, object);
 const validatePost = (object) => handleCallback(postSchema, object);
+const validatePostUpdate = (object) => handleCallback(postUpdateSchema, object);
 
 module.exports = {
   validateLogin,
   validateCreate,
   validateCategory,
   validatePost,
+  validatePostUpdate,
+  validateUser,
 };

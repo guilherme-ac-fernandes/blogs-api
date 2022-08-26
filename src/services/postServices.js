@@ -1,5 +1,5 @@
 const { User, BlogPost, Category, PostCategory, sequelize } = require('../database/models');
-const { validatePost } = require('./helpers/validations');
+const { validatePost, validatePostUpdate, validateUser } = require('./helpers/validations');
 
 module.exports = {
   // Resolução da aplicação de inserção em duas tabelas utilizando
@@ -39,6 +39,7 @@ module.exports = {
         {
           model: Category,
           as: 'categories',
+          through: { attributes: [] },
         },
       ],
     });
@@ -57,10 +58,34 @@ module.exports = {
         {
           model: Category,
           as: 'categories',
+          through: { attributes: [] },
         },
       ],
     });
     if (!post) return { code: 404, message: 'Post does not exist' };
     return { code: 200, data: post };
+  },
+
+  update: async (id, userId, { title, content }) => {
+    const validation = validatePostUpdate({ title, content });
+    if (validation.code) return validation;
+    const validationUser = await validateUser(id, userId);
+    if (validationUser.code) return validationUser;
+
+    await BlogPost.update({ title, content }, { where: { id } });
+    const { dataValues } = await BlogPost.findByPk(id, { include: 
+      [
+        { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { model: Category, as: 'categories', through: { attributes: [] } },
+      ],
+    });
+    return { code: 200, data: dataValues };
+  },
+
+  delete: async (id, userId) => {
+    const validationUser = await validateUser(id, userId);
+    if (validationUser.code) return validationUser;
+    await BlogPost.destroy({ where: { id } });
+    return { code: 204 };
   },
 };
