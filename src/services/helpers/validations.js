@@ -42,6 +42,21 @@ const categorySchema = Joi.object({
   }),
 });
 
+const postSchema = Joi.object({
+  title: Joi.string().required().messages({
+    'string.empty': ERROR_MISSING_FIELDS,
+    'any.required': ERROR_MISSING_FIELDS,
+  }),
+  content: Joi.string().required().messages({
+    'string.empty': ERROR_MISSING_FIELDS,
+    'any.required': ERROR_MISSING_FIELDS,
+  }),
+  categoryIds: Joi.array().required().messages({
+    'string.empty': ERROR_MISSING_FIELDS,
+    'any.required': ERROR_MISSING_FIELDS,
+  }),
+});
+
 // Função genérica para validações
 const handleCallback = (schema, variable) => {
   const { error } = schema.validate(variable);
@@ -55,19 +70,11 @@ const handleCallback = (schema, variable) => {
 const validateLogin = (object) => handleCallback(loginSchema, object);
 const validateCreate = (object) => handleCallback(createSchema, object);
 const validateCategory = (object) => handleCallback(categorySchema, object);
-
-// const validateLogin = ({ email, password }) => {
-//   if (!email || email === '') {
-//     return { code: 400, message: 'Some required fields are missing' };
-//   }
-//   if (!password || password === '') {
-//     return { code: 400, message: 'Some required fields are missing' };
-//   }
-//   return true;
-// };
+const validatePost = (object) => handleCallback(postSchema, object);
 
 module.exports = {
   validateLogin,
   validateCreate,
   validateCategory,
+  validatePost,
 };
