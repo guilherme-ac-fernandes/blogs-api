@@ -24,6 +24,7 @@ app.get('/categories', Middlewares.auth, categoryController.getAll);
 
 // PosrController
 app.post('/post', Middlewares.auth, postController.create);
+app.get('/post', Middlewares.auth, postController.getAll);
 
 // Middleware de Erro Genérico
 app.use(Middlewares.error);

@@ -1,4 +1,4 @@
-const { BlogPost, Category, PostCategory, sequelize } = require('../database/models');
+const { User, BlogPost, Category, PostCategory, sequelize } = require('../database/models');
 const { validatePost } = require('./helpers/validations');
 
 module.exports = {
@@ -24,5 +24,25 @@ module.exports = {
       return { code: 201, data: dataValues };
     });
     return { data, code, message };
+  },
+
+  // Utilização de múltiplos include em uma tabela proveniente do StackOverFlow
+  // source: https://stackoverflow.com/questions/25880539/join-across-multiple-junction-tables-with-sequelize
+  getAll: async () => {
+    const posts = await BlogPost.findAll({
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: { exclude: ['password'] },
+        },
+        {
+          model: Category,
+          as: 'categories',
+        },
+      ],
+    });
+    if (!posts) return { code: 404, message: 'Posts not found' };
+    return { code: 200, data: posts };
   },
 };
