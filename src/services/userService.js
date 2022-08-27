@@ -1,6 +1,6 @@
 const { User } = require('../database/models');
-const createToken = require('./helpers/createToken');
-const { validateCreate } = require('./helpers/validations');
+const createToken = require('./helpers_services/createToken');
+const { validateCreate } = require('./helpers_services/validations');
 
 module.exports = {
   create: async ({ displayName, email, password, image }) => {

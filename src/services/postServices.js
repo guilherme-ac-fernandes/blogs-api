@@ -1,6 +1,16 @@
 const Sequelize = require('sequelize');
-const { User, BlogPost, Category, PostCategory, sequelize } = require('../database/models');
-const { validatePost, validatePostUpdate, validateUser } = require('./helpers/validations');
+const {
+  User,
+  BlogPost,
+  Category,
+  PostCategory,
+  sequelize,
+} = require('../database/models');
+const {
+  validatePost,
+  validatePostUpdate,
+  validateUser,
+} = require('./helpers_services/validations');
 
 const { Op } = Sequelize;
 
@@ -74,7 +84,6 @@ module.exports = {
     if (validation.code) return validation;
     const validationUser = await validateUser(id, userId);
     if (validationUser.code) return validationUser;
-
     await BlogPost.update({ title, content }, { where: { id } });
     const { dataValues } = await BlogPost.findByPk(id, { include: 
       [
@@ -113,5 +122,4 @@ module.exports = {
     if (!posts) return { code: 404, message: 'AQUI' };
     return { code: 200, data: posts };
   },
-  
 };

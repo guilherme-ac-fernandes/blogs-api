@@ -1,6 +1,6 @@
 const { User } = require('../database/models');
-const createToken = require('./helpers/createToken');
-const { validateLogin } = require('./helpers/validations');
+const createToken = require('./helpers_services/createToken');
+const { validateLogin } = require('./helpers_services/validations');
 
 module.exports = {
   login: async ({ email, password }) => {
