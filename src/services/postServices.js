@@ -1,5 +1,8 @@
+const Sequelize = require('sequelize');
 const { User, BlogPost, Category, PostCategory, sequelize } = require('../database/models');
 const { validatePost, validatePostUpdate, validateUser } = require('./helpers/validations');
+
+const { Op } = Sequelize;
 
 module.exports = {
   // Resolução da aplicação de inserção em duas tabelas utilizando
@@ -89,9 +92,18 @@ module.exports = {
     return { code: 204 };
   },
 
+  // Utilização do Op.or para aplicação de mais de uma opção no where proveniente do Grepper
+  // source: https://www.codegrepper.com/code-examples/javascript/sequelize+like+query
+  // Juntamente com a utilização do Op.like para implementar a opção like do sql proveniente do StackOverFlow
+  // source: https://stackoverflow.com/questions/53971268/node-sequelize-find-where-like-wildcard 
   search: async (search) => {
     const posts = await BlogPost.findAll({
-      where: { title: { [sequelize.Op.like]: `%${search}%` } },
+      where: {
+        [Op.or]: [
+          { title: { [Op.like]: `%${search}%` } },
+          { content: { [Op.like]: `%${search}%` } },
+        ],
+      },
       include: 
       [
         { model: User, as: 'user', attributes: { exclude: ['password'] } },
