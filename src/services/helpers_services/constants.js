@@ -1,0 +1,8 @@
+module.exports = {
+  CREATED: 201,
+  SUCESS: 200,
+  BAD_REQUEST: 400,
+  NOT_FOUND: 404,
+  NO_CONTENT: 204,
+  CONFLICT: 409,
+};

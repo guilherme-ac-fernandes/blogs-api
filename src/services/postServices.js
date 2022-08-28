@@ -11,6 +11,13 @@ const {
   validatePostUpdate,
   validateUser,
 } = require('./helpers_services/validations');
+const {
+  CREATED,
+  SUCESS,
+  BAD_REQUEST,
+  NOT_FOUND,
+  NO_CONTENT,
+} = require('./helpers_services/constants');
 
 const { Op } = Sequelize;
 
@@ -24,7 +31,7 @@ module.exports = {
     const { data, code, message } = await sequelize.transaction(async (transaction) => {
       const { count } = await Category.findAndCountAll({ where: { id: categoryIds } });
       if (count < categoryIds.length) {
-        return { code: 400, message: '"categoryIds" not found' };
+        return { code: BAD_REQUEST, message: '"categoryIds" not found' };
       }
       const { dataValues } = await BlogPost.create(
         { title, content, userId },
@@ -34,7 +41,7 @@ module.exports = {
         postId: dataValues.id, categoryId: number,
       }));
       await PostCategory.bulkCreate(postsCategories, { transaction });
-      return { code: 201, data: dataValues };
+      return { code: CREATED, data: dataValues };
     });
     return { data, code, message };
   },
@@ -56,8 +63,8 @@ module.exports = {
         },
       ],
     });
-    if (!posts) return { code: 404, message: 'Posts not found' };
-    return { code: 200, data: posts };
+    if (!posts) return { code: NOT_FOUND, message: 'Posts not found' };
+    return { code: SUCESS, data: posts };
   },
 
   findById: async (id) => {
@@ -75,8 +82,8 @@ module.exports = {
         },
       ],
     });
-    if (!post) return { code: 404, message: 'Post does not exist' };
-    return { code: 200, data: post };
+    if (!post) return { code: NOT_FOUND, message: 'Post does not exist' };
+    return { code: SUCESS, data: post };
   },
 
   update: async (id, userId, { title, content }) => {
@@ -91,14 +98,14 @@ module.exports = {
         { model: Category, as: 'categories', through: { attributes: [] } },
       ],
     });
-    return { code: 200, data: dataValues };
+    return { code: SUCESS, data: dataValues };
   },
 
   delete: async (id, userId) => {
     const validationUser = await validateUser(id, userId);
     if (validationUser.code) return validationUser;
     await BlogPost.destroy({ where: { id } });
-    return { code: 204 };
+    return { code: NO_CONTENT };
   },
 
   // Utilização do Op.or para aplicação de mais de uma opção no where proveniente do Grepper
@@ -119,7 +126,7 @@ module.exports = {
         { model: Category, as: 'categories', through: { attributes: [] } },
       ],
     });
-    if (!posts) return { code: 404, message: 'AQUI' };
-    return { code: 200, data: posts };
+    if (!posts) return { code: NOT_FOUND, message: 'AQUI' };
+    return { code: SUCESS, data: posts };
   },
 };
