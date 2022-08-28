@@ -1,4 +1,7 @@
 const Sequelize = require('sequelize');
+
+const { Op } = Sequelize;
+
 const {
   User,
   BlogPost,
@@ -10,16 +13,30 @@ const {
   validatePost,
   validatePostUpdate,
   validateUser,
+  validateCategories,
 } = require('./helpers_services/validations');
 const {
   CREATED,
   SUCESS,
-  BAD_REQUEST,
   NOT_FOUND,
   NO_CONTENT,
 } = require('./helpers_services/codes');
 
-const { Op } = Sequelize;
+// Array padrão de includes das tabelas de junção
+// Utilização de múltiplos include em uma tabela proveniente do StackOverFlow
+// source: https://stackoverflow.com/questions/25880539/join-across-multiple-junction-tables-with-sequelize
+const ARRAY_INCLUDES = [
+  {
+    model: User,
+    as: 'user',
+    attributes: { exclude: ['password'] },
+  },
+  {
+    model: Category,
+    as: 'categories',
+    through: { attributes: [] },
+  },
+];
 
 module.exports = {
   // Resolução da aplicação de inserção em duas tabelas utilizando
@@ -28,15 +45,11 @@ module.exports = {
   create: async (userId, { title, content, categoryIds }) => {
     const validation = validatePost({ title, content, categoryIds });
     if (validation.code) return validation;
+    const validationCategories = await validateCategories(categoryIds);
+    if (validationCategories.code) return validationCategories;
+
     const { data, code, message } = await sequelize.transaction(async (transaction) => {
-      const { count } = await Category.findAndCountAll({ where: { id: categoryIds } });
-      if (count < categoryIds.length) {
-        return { code: BAD_REQUEST, message: '"categoryIds" not found' };
-      }
-      const { dataValues } = await BlogPost.create(
-        { title, content, userId },
-        { transaction },
-      );
+      const { dataValues } = await BlogPost.create({ title, content, userId }, { transaction });
       const postsCategories = categoryIds.map((number) => ({
         postId: dataValues.id, categoryId: number,
       }));
@@ -46,42 +59,14 @@ module.exports = {
     return { data, code, message };
   },
 
-  // Utilização de múltiplos include em uma tabela proveniente do StackOverFlow
-  // source: https://stackoverflow.com/questions/25880539/join-across-multiple-junction-tables-with-sequelize
   getAll: async () => {
-    const posts = await BlogPost.findAll({
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: { exclude: ['password'] },
-        },
-        {
-          model: Category,
-          as: 'categories',
-          through: { attributes: [] },
-        },
-      ],
-    });
+    const posts = await BlogPost.findAll({ include: ARRAY_INCLUDES });
     if (!posts) return { code: NOT_FOUND, message: 'Posts not found' };
     return { code: SUCESS, data: posts };
   },
 
   findById: async (id) => {
-    const post = await BlogPost.findByPk(id, {
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: { exclude: ['password'] },
-        },
-        {
-          model: Category,
-          as: 'categories',
-          through: { attributes: [] },
-        },
-      ],
-    });
+    const post = await BlogPost.findByPk(id, { include: ARRAY_INCLUDES });
     if (!post) return { code: NOT_FOUND, message: 'Post does not exist' };
     return { code: SUCESS, data: post };
   },
@@ -92,12 +77,7 @@ module.exports = {
     const validationUser = await validateUser(id, userId);
     if (validationUser.code) return validationUser;
     await BlogPost.update({ title, content }, { where: { id } });
-    const { dataValues } = await BlogPost.findByPk(id, { include: 
-      [
-        { model: User, as: 'user', attributes: { exclude: ['password'] } },
-        { model: Category, as: 'categories', through: { attributes: [] } },
-      ],
-    });
+    const { dataValues } = await BlogPost.findByPk(id, { include: ARRAY_INCLUDES });
     return { code: SUCESS, data: dataValues };
   },
 
@@ -120,13 +100,8 @@ module.exports = {
           { content: { [Op.like]: `%${search}%` } },
         ],
       },
-      include: 
-      [
-        { model: User, as: 'user', attributes: { exclude: ['password'] } },
-        { model: Category, as: 'categories', through: { attributes: [] } },
-      ],
+      include: ARRAY_INCLUDES,
     });
-    if (!posts) return { code: NOT_FOUND, message: 'AQUI' };
     return { code: SUCESS, data: posts };
   },
 };

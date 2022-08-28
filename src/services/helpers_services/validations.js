@@ -1,5 +1,5 @@
-const { BlogPost } = require('../../database/models');
-const { NOT_FOUND, UNAUTHORIZED } = require('./codes');
+const { BlogPost, Category } = require('../../database/models');
+const { BAD_REQUEST, NOT_FOUND, UNAUTHORIZED } = require('./codes');
 const {
   loginSchema,
   createSchema,
@@ -26,6 +26,15 @@ const validateUser = async (id, userId) => {
   return true;
 };
 
+// Função de validação se categorias existem
+const validateCategories = async (categoryIds) => {
+  const { count } = await Category.findAndCountAll({ where: { id: categoryIds } });
+  if (count < categoryIds.length) {
+    return { code: BAD_REQUEST, message: '"categoryIds" not found' };
+  }
+  return true;
+};
+
 // Funções de validação utilizando Joi
 const validateLogin = (object) => handleValidation(loginSchema, object);
 const validateCreate = (object) => handleValidation(createSchema, object);
@@ -40,4 +49,5 @@ module.exports = {
   validatePost,
   validatePostUpdate,
   validateUser,
+  validateCategories,
 };
