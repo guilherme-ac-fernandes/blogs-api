@@ -7,7 +7,7 @@ const {
   NOT_FOUND,
   NO_CONTENT,
   CONFLICT,
-} = require('./helpers_services/constants');
+} = require('./helpers_services/codes');
 
 module.exports = {
   create: async ({ displayName, email, password, image }) => {

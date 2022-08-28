@@ -1,6 +1,6 @@
 const { Category } = require('../database/models');
 const { validateCategory } = require('./helpers_services/validations');
-const { CREATED, SUCESS, NOT_FOUND } = require('./helpers_services/constants');
+const { CREATED, SUCESS, NOT_FOUND } = require('./helpers_services/codes');
 
 module.exports = {
   create: async ({ name }) => {

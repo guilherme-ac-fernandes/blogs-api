@@ -17,7 +17,7 @@ const {
   BAD_REQUEST,
   NOT_FOUND,
   NO_CONTENT,
-} = require('./helpers_services/constants');
+} = require('./helpers_services/codes');
 
 const { Op } = Sequelize;
 
