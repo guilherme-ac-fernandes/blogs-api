@@ -1,76 +1,15 @@
-const Joi = require('joi');
 const { BlogPost } = require('../../database/models');
-
-const ERROR_MISSING_FIELDS = '400|Some required fields are missing';
-const ERROR_NAME_LENGTH = '400|"displayName" length must be at least 8 characters long';
-const ERROR_EMAIL = '400|"email" must be a valid email';
-const ERROR_PASSWORD = '400|"password" length must be at least 6 characters long';
-const ERROR_CATEGORY = '400|"name" is required';
-
-const loginSchema = Joi.object({
-  email: Joi.string().email().required().messages({
-    'string.empty': ERROR_MISSING_FIELDS,
-    'any.required': ERROR_MISSING_FIELDS,
-  }),
-  password: Joi.string().required().messages({
-    'string.empty': ERROR_MISSING_FIELDS,
-    'any.required': ERROR_MISSING_FIELDS,
-  }),
-});
-
-const createSchema = Joi.object({
-  displayName: Joi.string().min(8).required().messages({
-    'string.empty': ERROR_NAME_LENGTH,
-    'string.min': ERROR_NAME_LENGTH,
-    'any.required': ERROR_NAME_LENGTH,
-  }),
-  email: Joi.string().email().required().messages({
-    'string.empty': ERROR_EMAIL,
-    'string.email': ERROR_EMAIL,
-    'any.required': ERROR_EMAIL,
-  }),
-  password: Joi.string().min(6).required().messages({
-    'string.empty': ERROR_PASSWORD,
-    'string.min': ERROR_PASSWORD,
-    'any.required': ERROR_PASSWORD,
-  }),
-});
-
-const categorySchema = Joi.object({
-  name: Joi.string().required().messages({
-    'string.empty': ERROR_CATEGORY,
-    'any.required': ERROR_CATEGORY,
-  }),
-});
-
-const postSchema = Joi.object({
-  title: Joi.string().required().messages({
-    'string.empty': ERROR_MISSING_FIELDS,
-    'any.required': ERROR_MISSING_FIELDS,
-  }),
-  content: Joi.string().required().messages({
-    'string.empty': ERROR_MISSING_FIELDS,
-    'any.required': ERROR_MISSING_FIELDS,
-  }),
-  categoryIds: Joi.array().required().messages({
-    'string.empty': ERROR_MISSING_FIELDS,
-    'any.required': ERROR_MISSING_FIELDS,
-  }),
-});
-
-const postUpdateSchema = Joi.object({
-  title: Joi.string().required().messages({
-    'string.empty': ERROR_MISSING_FIELDS,
-    'any.required': ERROR_MISSING_FIELDS,
-  }),
-  content: Joi.string().required().messages({
-    'string.empty': ERROR_MISSING_FIELDS,
-    'any.required': ERROR_MISSING_FIELDS,
-  }),
-});
+const { NOT_FOUND, UNAUTHORIZED } = require('./codes');
+const {
+  loginSchema,
+  createSchema,
+  categorySchema,
+  postSchema,
+  postUpdateSchema,
+} = require('./schemasJoi');
 
 // Função genérica para validações
-const handleCallback = (schema, variable) => {
+const handleValidation = (schema, variable) => {
   const { error } = schema.validate(variable);
   if (error !== undefined) {
     const [code, message] = error.message.split('|');
@@ -79,18 +18,20 @@ const handleCallback = (schema, variable) => {
   return true;
 };
 
+// Função de validação de usuário autorizado ou não
 const validateUser = async (id, userId) => {
   const post = await BlogPost.findByPk(id);
-  if (!post) return { code: 404, message: 'Post does not exist' };
-  if (userId !== post.userId) return { code: 401, message: 'Unauthorized user' };
+  if (!post) return { code: NOT_FOUND, message: 'Post does not exist' };
+  if (userId !== post.userId) return { code: UNAUTHORIZED, message: 'Unauthorized user' };
   return true;
 };
 
-const validateLogin = (object) => handleCallback(loginSchema, object);
-const validateCreate = (object) => handleCallback(createSchema, object);
-const validateCategory = (object) => handleCallback(categorySchema, object);
-const validatePost = (object) => handleCallback(postSchema, object);
-const validatePostUpdate = (object) => handleCallback(postUpdateSchema, object);
+// Funções de validação utilizando Joi
+const validateLogin = (object) => handleValidation(loginSchema, object);
+const validateCreate = (object) => handleValidation(createSchema, object);
+const validateCategory = (object) => handleValidation(categorySchema, object);
+const validatePost = (object) => handleValidation(postSchema, object);
+const validatePostUpdate = (object) => handleValidation(postUpdateSchema, object);
 
 module.exports = {
   validateLogin,
