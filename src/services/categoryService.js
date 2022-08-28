@@ -12,7 +12,9 @@ module.exports = {
 
   getAll: async () => {
     const categories = await Category.findAll();
-    if (!categories) return { code: NOT_FOUND, message: 'Categories not found' };
+    if (!categories) {
+      return { code: NOT_FOUND, message: 'Categories not found' };
+    }
     return { code: SUCESS, data: categories };
   },
 };

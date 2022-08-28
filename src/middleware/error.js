@@ -1,3 +1,5 @@
+const { INTERNAL_SERVER_ERROR } = require('../services/helpers_services/codes');
+
 module.exports = (err, _req, res, _next) => {
   // console.log('erro:', err);
 
@@ -5,7 +7,7 @@ module.exports = (err, _req, res, _next) => {
     return res.status(err.code).json({ message: err.message });
   }
 
-  return res.status(500).json({
+  return res.status(INTERNAL_SERVER_ERROR).json({
     error: { code: 'internal', message: 'Internal server error' },
   });
 };
