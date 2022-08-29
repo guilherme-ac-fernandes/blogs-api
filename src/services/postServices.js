@@ -26,16 +26,8 @@ const {
 // Utilização de múltiplos include em uma tabela proveniente do StackOverFlow
 // source: https://stackoverflow.com/questions/25880539/join-across-multiple-junction-tables-with-sequelize
 const ARRAY_INCLUDES = [
-  {
-    model: User,
-    as: 'user',
-    attributes: { exclude: ['password'] },
-  },
-  {
-    model: Category,
-    as: 'categories',
-    through: { attributes: [] },
-  },
+  { model: User, as: 'user', attributes: { exclude: ['password'] } },
+  { model: Category, as: 'categories', through: { attributes: [] } },
 ];
 
 module.exports = {
@@ -47,7 +39,6 @@ module.exports = {
     if (validation.code) return validation;
     const validationCategories = await validateCategories(categoryIds);
     if (validationCategories.code) return validationCategories;
-
     const { data, code, message } = await sequelize.transaction(async (transaction) => {
       const { dataValues } = await BlogPost.create({ title, content, userId }, { transaction });
       const postsCategories = categoryIds.map((number) => ({

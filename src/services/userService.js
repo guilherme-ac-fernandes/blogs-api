@@ -21,17 +21,13 @@ module.exports = {
   },
 
   getAll: async () => {
-    const users = await User.findAll({
-      attributes: { exclude: ['password'] },
-    });
+    const users = await User.findAll({ attributes: { exclude: ['password'] } });
     if (!users) return { code: NOT_FOUND, message: 'Users not found' };
     return { code: SUCESS, data: users };
   },
 
   findById: async (id) => {
-    const user = await User.findByPk(id, {
-      attributes: { exclude: ['password'] },
-    });
+    const user = await User.findByPk(id, { attributes: { exclude: ['password'] } });
     if (!user) return { code: NOT_FOUND, message: 'User does not exist' };
     return { code: SUCESS, data: user };
   },
