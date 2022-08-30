@@ -1,9 +1,5 @@
 const express = require('express');
 
-const app = express();
-
-app.use(express.json());
-
 // Routers e Middleware
 const {
   loginRoute,
@@ -12,6 +8,10 @@ const {
   userRoute,
 } = require('./routers');
 const Middleware = require('./middleware');
+
+const app = express();
+
+app.use(express.json());
 
 // Rotas
 app.use('/login', loginRoute);

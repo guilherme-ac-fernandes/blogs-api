@@ -1,9 +1,10 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const { User } = require('../database/models');
-const { UNAUTHORIZED } = require('../services/helpers_services/codes');
 
 const { JWT_SECRET } = process.env;
+
+const { User } = require('../database/models');
+const { UNAUTHORIZED } = require('../services/helpers_services/codes');
 
 // Middleware de autentificação proveniente da resolução do exercício
 // presente no course da trybe (referente ao dia 24.3)

@@ -1,9 +1,9 @@
 const express = require('express');
 
-const router = express.Router();
-
 const { userController } = require('../controllers');
 const Middleware = require('../middleware');
+
+const router = express.Router();
 
 router.post('/', userController.create);
 
