@@ -10,6 +10,8 @@ const { UNAUTHORIZED } = require('../services/helpers/codes');
 // presente no course da trybe (referente ao dia 24.3)
 // Baseado na resolução do Aluno autor deste projeto (Guilherme Fernandes)
 // source: https://github.com/guilherme-ac-fernandes/trybe-exercicios/blob/main/03-back-end/bloco-24-node.js-orm-e-autentificacao/dia-04-testando-apis-com-testes-de-integracao/auth/validateJWT.js
+// Correção da arquitetura das camadas proveniente da ajuda do instrutor Guilherme de Souza que observou
+// que estava fazendo a busca pelo usuário pulando a camada de services, Muito Obrigado Guilherme!
 module.exports = async (req, res, next) => {
   try {
     const { authorization: token } = req.headers;
