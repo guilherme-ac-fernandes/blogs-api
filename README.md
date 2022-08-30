@@ -2,14 +2,14 @@
 
 Consiste em uma API e um banco de dados para produção de conteúdo para um blog. 
 
-* Contruída com Node.js, Express, Sequeliza com MySQL e Docker
+* Contruída com Node.js, Express, Sequelize com MySQL e Docker
 * Utilizando as práticas do REST
 * Aplicada Arquitetura de Software, com as camadas de Modelo, Serviço e de Controladores
 
 
 ### Instruções
 
-- Para rodar o repositório localmente, realize o clone do projeto e utilize os comandos a seguir para inicializar o Docker:
+- Para rodar o repositório localmente, realize o clone do projeto e utilize os comandos a seguir para inicializar o Docker, instalar as dependências e configurar o banco de dados:
 
 ```
 npm run prestart // para criar o banco de dados e as migrações
@@ -17,7 +17,6 @@ npm run seed // para popular o banco de dados
 docker-compose up -d --build
 docker attach store_manager
 npm install // para instalar as dependências
-npm start // 
 ```
 
 E utilize os comandos a seguir para executar a aplicação:
@@ -89,7 +88,7 @@ Na requisição POST, é necessário informar a o nome da categoria no formato a
 | `POST` | Adiciona um novo post e realiza o vínculo com a tabela de categorias | http://localhost:3000/post |
 | `GET` | Retorna todos os post contendo o usuário criador e as categorias | http://localhost:3000/post |
 | `GET` | Retorna um post específico contendo o usuário criador e as categorias | http://localhost:3000/post/:id |
-| `PUT` | Altera o título e o conteudo de um post específico | http://localhost:3000/post/:id |
+| `PUT` | Altera o título e o conteúdo de um post específico | http://localhost:3000/post/:id |
 | `DELETE` | Deleta um post específico | http://localhost:3000/post/:id |
 | `GET` | Filtra os post referente a informação passada como query | http://localhost:3000/post/search?q=:searchTerm |
 
@@ -111,8 +110,4 @@ Na requisição PUT, os dados a serem atualizados devem estar no seguinte format
   "content": "The whole text for the blog post goes here in this key"
 }
 ```
-
-
-
-
 
