@@ -14,13 +14,13 @@ const {
   validatePostUpdate,
   validateUser,
   validateCategories,
-} = require('./helpers_services/validations');
+} = require('./helpers/validations');
 const {
   CREATED,
   SUCESS,
   NOT_FOUND,
   NO_CONTENT,
-} = require('./helpers_services/codes');
+} = require('./helpers/codes');
 
 // Array padrão de includes das tabelas de junção
 // Utilização de múltiplos include em uma tabela proveniente do StackOverFlow

@@ -1,7 +1,7 @@
 const { User } = require('../database/models');
-const createToken = require('./helpers_services/createToken');
-const { validateLogin } = require('./helpers_services/validations');
-const { SUCESS, BAD_REQUEST } = require('./helpers_services/codes');
+const createToken = require('./helpers/createToken');
+const { validateLogin } = require('./helpers/validations');
+const { SUCESS, BAD_REQUEST } = require('./helpers/codes');
 
 module.exports = {
   login: async ({ email, password }) => {

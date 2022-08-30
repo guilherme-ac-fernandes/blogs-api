@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = process.env;
 
 const { User } = require('../database/models');
-const { UNAUTHORIZED } = require('../services/helpers_services/codes');
+const { UNAUTHORIZED } = require('../services/helpers/codes');
 
 // Middleware de autentificação proveniente da resolução do exercício
 // presente no course da trybe (referente ao dia 24.3)

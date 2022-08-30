@@ -1,4 +1,4 @@
-const { INTERNAL_SERVER_ERROR } = require('../services/helpers_services/codes');
+const { INTERNAL_SERVER_ERROR } = require('../services/helpers/codes');
 
 module.exports = (err, _req, res, _next) => {
   // console.log('erro:', err);
