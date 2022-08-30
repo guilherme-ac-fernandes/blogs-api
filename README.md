@@ -1,4 +1,4 @@
-# Blogs API 📦
+# Blogs API 🖥
 
 Consiste em uma API e um banco de dados para produção de conteúdo para um blog. 
 
