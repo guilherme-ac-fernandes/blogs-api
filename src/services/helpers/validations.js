@@ -1,6 +1,7 @@
 const { BlogPost, Category } = require('../../database/models');
 const { BAD_REQUEST, NOT_FOUND, UNAUTHORIZED } = require('./codes');
 const {
+  CHAR,
   loginSchema,
   createSchema,
   categorySchema,
@@ -12,7 +13,7 @@ const {
 const handleValidation = (schema, variable) => {
   const { error } = schema.validate(variable);
   if (error !== undefined) {
-    const [code, message] = error.message.split('|');
+    const [code, message] = error.message.split(CHAR);
     return { code: Number(code), message };
   }
   return true;
