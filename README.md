@@ -45,13 +45,13 @@ Nessa requisição é necessário informar o seguinte JSON:
 }
 ```
 
-#### User
+#### Usuário
 
 | Método | Funcionalidade | URL |
 |---|---|---|
 | `POST` | Criar um novo usuário e retorna o token | http://localhost:3000/user |
-| `GET` | Retorno os dados não sensíveis de todos os usuário | http://localhost:3000/user |
-| `GET` | Retorno os dados não sensíveis de um usuário específico | http://localhost:3000/user/:id |
+| `GET` | Retorna os dados não sensíveis de todos os usuário | http://localhost:3000/user |
+| `GET` | Retorna os dados não sensíveis de um usuário específico | http://localhost:3000/user/:id |
 | `DELETE` | Deleta os dados do usuário através da informação do token | http://localhost:3000/user/me |
 
 
@@ -65,6 +65,53 @@ Na requisição POST, é necessário informar a os dados o usuário no formato a
   "image": "http://4.bp.blogspot.com/_YA50adQ-7vQ/S1gfR_6ufpI/AAAAAAAAAAk/1ErJGgRWZDg/S45/brett.png"
 }
 ```
+
+#### Categorias
+
+| Método | Funcionalidade | URL |
+|---|---|---|
+| `POST` | Adiciona uma nova categoria | http://localhost:3000/categories |
+| `GET` | Retorna todas as categorias cadastradas | http://localhost:3000/categories |
+
+Na requisição POST, é necessário informar a o nome da categoria no formato a seguir:
+
+```
+{
+  "name": "Typescript"
+}
+```
+
+
+#### Post
+
+| Método | Funcionalidade | URL |
+|---|---|---|
+| `POST` | Adiciona um novo post e realiza o vínculo com a tabela de categorias | http://localhost:3000/post |
+| `GET` | Retorna todos os post contendo o usuário criador e as categorias | http://localhost:3000/post |
+| `GET` | Retorna um post específico contendo o usuário criador e as categorias | http://localhost:3000/post/:id |
+| `PUT` | Altera o título e o conteudo de um post específico | http://localhost:3000/post/:id |
+| `DELETE` | Deleta um post específico | http://localhost:3000/post/:id |
+| `GET` | Filtra os post referente a informação passada como query | http://localhost:3000/post/search?q=:searchTerm |
+
+Na requisição POST, é necessário informar a os dados do post no formato a seguir:
+
+```
+{
+  "title": "Latest updates, August 1st",
+  "content": "The whole text for the blog post goes here in this key",
+  "categoryIds": [1, 2]
+}
+```
+
+Na requisição PUT, os dados a serem atualizados devem estar no seguinte formato:
+
+```
+{
+  "title": "Latest updates, August 1st",
+  "content": "The whole text for the blog post goes here in this key"
+}
+```
+
 
 
 
