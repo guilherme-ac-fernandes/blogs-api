@@ -32,6 +32,12 @@ module.exports = {
     return { code: SUCESS, data: user };
   },
 
+  findByEmail: async (email) => {
+    const user = await User.findOne({ where: { email } });
+    if (!user) return { code: NOT_FOUND, message: 'User does not exist' };
+    return { code: SUCESS, data: { ...user.dataValues } };
+  },
+
   delete: async (userId) => {
     await User.destroy({ where: { id: userId } });
     return { code: NO_CONTENT };

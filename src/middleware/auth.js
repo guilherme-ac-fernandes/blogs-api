@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const { JWT_SECRET } = process.env;
 
-const { User } = require('../database/models');
+const { userService } = require('../services');
 const { UNAUTHORIZED } = require('../services/helpers/codes');
 
 // Middleware de autentificação proveniente da resolução do exercício
@@ -15,8 +15,9 @@ module.exports = async (req, res, next) => {
     const { authorization: token } = req.headers;
     if (!token) return res.status(UNAUTHORIZED).json({ message: 'Token not found' });
     const { email } = jwt.verify(token, JWT_SECRET);
-    const { displayName, id } = await User.findOne({ where: { email } });
-    req.user = { email, displayName, userId: id };
+    const { code, data, message } = await userService.findByEmail(email);
+    if (message) return res.status(code).json({ message });
+    req.user = { displayName: data.displayName, userId: data.id };
     next();
   } catch (err) {
     return res.status(UNAUTHORIZED).json({ message: 'Expired or invalid token' });
