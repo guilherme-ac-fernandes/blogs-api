@@ -10,6 +10,6 @@ router.post('/', userController.create);
 router.use(Middleware.auth);
 router.get('/', userController.getAll);
 router.get('/:id', userController.findById);
-router.delete('/:id', userController.delete);
+router.delete('/me', userController.delete);
 
 module.exports = router;
