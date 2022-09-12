@@ -17,6 +17,7 @@ npm run seed // para popular o banco de dados
 docker-compose up -d --build
 docker attach store_manager
 npm install // para instalar as dependências
+docker-compose down // para parar completamente a aplicação
 ```
 
 E utilize os comandos a seguir para executar a aplicação:
