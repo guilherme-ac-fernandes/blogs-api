@@ -1,10 +1,10 @@
-# Projeto Blogs API 🖥
+# Projeto Blogs API 📝🗒
 
-Consiste em uma API e um banco de dados para produção de conteúdo para um blog. 
+Consiste em uma API de banco de dados para produção de conteúdo para um blog. 
 
-* Contruída com Node.js, Express, Sequelize com MySQL e Docker
+* Construída com Node.js, Express, Sequelize com MySQL e Docker
 * Utilizando as práticas do REST
-* Aplicada Arquitetura de Software, com as camadas de Modelo, Serviço e de Controladores
+* Aplicada Arquitetura de Software, com as camadas de Modelo, de Serviço e de Controladores
 
 
 ### Instruções
